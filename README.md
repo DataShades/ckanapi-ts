@@ -85,7 +85,7 @@ const portal = new CkanApi.Portal("https://demo.ckan.org")
 # different client that will perform requiests on behalf of the token owner
 const portalWithUser = portal.withToken("my-secret-api-token")
 ```
-`
+
 Pay attention to the example above. `Portal::withToken` creates a new instance of the portal. This means, that `portal` from the example still performs un-authenticated requests, while `portalWithuser` acts as the logged-in user. That allows you to split the single anonymous client into multiple independent user-clients:
 
 ```js
