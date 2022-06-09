@@ -1,4 +1,4 @@
 const assert = require("assert");
-const mod = require("./dist");
-
-assert.deepStrictEqual(mod.CkanApi.a, {name: "hello"})
+const CkanApi = require("./dist");
+// console.log(CkanApi)
+// assert.deepStrictEqual(a, {name: "hello"})

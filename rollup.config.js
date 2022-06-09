@@ -4,9 +4,9 @@ import minify from 'rollup-plugin-babel-minify';
 import pkg from './package.json';
 
 export default [{
-  input: 'dist/index.js',
+  input: 'dist/browser-index.js',
   output: {
-    name: "Able",
+    name: "CkanApi",
     file: pkg.browser,
     format: 'iife',
     sourcemap: true,

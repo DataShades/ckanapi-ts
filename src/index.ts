@@ -1,12 +1,22 @@
-export namespace CkanApi {
+import * as api from "./api";
 
-  interface X {
-    name: string;
+export * as payloads from "./payloads";
+
+import type { RequestParams } from "./api";
+const nodeFetch = () => import("node-fetch");
+
+class NodeFetchClient implements api.IClient {
+  constructor() {}
+
+  async request(url: string, params?: RequestParams): Promise<api.IResponse> {
+    const fetch =
+      !process.env.CKAN_API_USE_NODE_FETCH && global.fetch
+        ? global.fetch
+        : await nodeFetch().then((d) => d.default);
+    return fetch(url, params);
   }
-
-  export const a: X = { name: "hello" };
-  export const b: X = { name: "hello" };
-
-  // export default {a, b};
-
 }
+
+api.Portal.clientFactory = () => new NodeFetchClient();
+
+export const { Portal, Action, Payload } = api;
