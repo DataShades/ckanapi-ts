@@ -70,15 +70,18 @@ export class Portal {
   }
 
   withToken(token: string): Portal {
-    this.token = token;
-    return this;
+    const portal = new Portal(this.url, this.client);
+    portal.token = token;
+
+    return portal;
   }
 
   async invoke(action: Action, payload?: Payload): Promise<unknown> {
     const url = this.urlFor(action);
 
+    const headers =  this.token ? { Authorization: this.token }: {};
     const params: RequestParams = {
-      headers: { Authorization: this.token },
+      headers,
       method: "POST",
       body: null,
     };
