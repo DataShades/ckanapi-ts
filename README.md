@@ -192,8 +192,8 @@ Often, CKAN actions expect some kind of user input. Above you've seen, how to pa
     c: boolean,
     d: null,
     e: ['array', 'of', 'values'],
-    f: {nested: 'object'
-  }})
+    f: {nested: 'object'}
+  })
   ```
 
 * FormData object:
