@@ -15,7 +15,7 @@ The only dependency included in this library is a `node-fetch`, which is used on
   * [NodeJS](#nodejs)
   * [Browser](#browser)
   * [Typescript / React / Vue / Svelte / Angular / etc.](#typescript--react--vue--svelte--angular--etc)
-  * [NodeJS]()
+  * [NodeJS](#nodejs)
 * [Basics](#basics)
   * [Chain-style](#chain-style)
   * [Struct-style](#struct-style)
