@@ -179,7 +179,7 @@ That's general wokflow for:
 
 #### Payload
 
-Often, CKAN actions expect some kind of user input. Above you've seed, how to pass the input to actions. Specific parameters that have a sense for the particular action can be found in the [CKAN API docs](http://docs.ckan.org/en/latest/api/index.html).
+Often, CKAN actions expect some kind of user input. Above you've seen, how to pass the input to actions. Specific parameters that have a sense for the particular action can be found in the [CKAN API docs](http://docs.ckan.org/en/latest/api/index.html).
 
 `ckanapi` expects action payload to be represented by the `Paylod` class. It accept one of the following as a constructor parameter:
 
