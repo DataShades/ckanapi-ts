@@ -34,16 +34,14 @@ Before starting, you have to add `ckanapi` to your project
 #### NodeJS
 
 1. Install a package:
-
-  ```sh
-  npm i ckanapi
-  ```
+   ```sh
+   npm i ckanapi
+   ```
 
 1. Import it:
-
-  ```js
-  const CkanApi = require("ckanapi")
-  ```
+   ```js
+   const CkanApi = require("ckanapi")
+   ```
 
 #### Browser
 
