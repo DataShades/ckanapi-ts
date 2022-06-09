@@ -202,6 +202,8 @@ Often, CKAN actions expect some kind of user input. Above you've seen, how to pa
   const form = new FormData
   form.append("field", "value")
   form.append("another", "field")
+
+  const payload = new Payload(form)
   ```
 
 ## Examples
