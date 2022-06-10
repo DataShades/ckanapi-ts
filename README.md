@@ -20,6 +20,9 @@ The only dependency included in this library is a `node-fetch`, which is used on
   * [Chain-style](#chain-style)
   * [Struct-style](#struct-style)
   * [Payload](#payload)
+* [Advanced](#advanced)
+  * [API Documentation](#api-documentation)
+  * [Interceptors](#interceptors)
 * [Examples](#examples)
   * [Browsing the Data Catalogue](#browsing-the-data-catalogue)
   * [Searching the Data Catalogue](#searching-the-data-catalogue)
@@ -203,6 +206,45 @@ Often, CKAN actions expect some kind of user input. Above you've seen, how to pa
 
   const payload = new Payload(form)
   ```
+
+## Advanced
+
+There is a number of extra features that are not required for daily use, but you may find them convenient in rare cases.
+
+### API Documentation
+
+Majority of the CKAN API actions provide brief documentation. It can be obtained in the following way for the any `Action` object:
+
+```js
+const action = new CkanApi.Action("package_search")
+const docs = await portal.documentation(action);
+console.log(docs)
+```
+
+### Interceptors
+
+If you want to modify the URL/payload/headers before the request or preprocess response, before it is parsed as a JSON, you can use interceptors. These are functions, that are added like middleware to the `Portal` instance. Each interceptor called twice:
+
+* before the request. The URL and parameters which will be used by the underlying HTTP client(`fetch`) are passed to this call. At this point, you can mutate the URL, add headers ar modify the payload
+* after the request. The URL, the parameters, and the **response** passed to this call. You can use URL and params as a reference here, there is no reason to change them now. As for response, you can do whatever you want with it. Additionally, if the interceptor returns something, this "something" will be used instead of the response.
+
+```js
+async function myInterceptor(url, params, response = null) {
+  if (response) {
+    // called after the request
+    if (!isAcceptableByMyCode(resp)) {
+      return createADifferentResponse(url, params)
+    }
+
+  } else {
+    // called before the request
+    params["headers"]["accept"] = "application/json";
+  }
+}
+
+portal.addInterceptor(myInterceptor)
+
+```
 
 ## Examples
 
