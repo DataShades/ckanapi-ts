@@ -19,7 +19,6 @@ The only dependency included in this library is a `node-fetch`, which is used on
 * [Basics](#basics)
   * [Chain-style](#chain-style)
   * [Struct-style](#struct-style)
-  * [Payload](#payload)
 * [Advanced](#advanced)
   * [API Documentation](#api-documentation)
   * [Interceptors](#interceptors)
@@ -70,7 +69,7 @@ import * as CkanApi from "ckanapi"
 Or just required components in order to get the best from tree-shaking:
 
 ```js
-import { Portal, Action, Payload } from "ckanapi"
+import { Portal, Action } from "ckanapi"
 ```
 
 ## Basics
@@ -144,11 +143,10 @@ That's general wokflow for:
   )
   ```
 
-* If required, pass payload to the action call(payload will be explained below):
+* If required, pass payload to the action call:
 
   ```js
-  const params = new CkanApi.Payload({"q": "*:*"})
-  portal.action.package_search(params)
+  portal.action.package_search({"q": "*:*"})
   ```
 
 #### Struct-style:
@@ -174,7 +172,7 @@ That's general wokflow for:
 
   ```js
   const action = new CkanApi.Action("package_search")
-  const params = new CkanApi.Payload({"q": "*:*"})
+  const params = {"q": "*:*"}
   const data = await portal.invoke(action, params)
   ```
 
@@ -182,19 +180,19 @@ That's general wokflow for:
 
 Often, CKAN actions expect some kind of user input. Above you've seen, how to pass the input to actions. Specific parameters that have a sense for the particular action can be found in the [CKAN API docs](http://docs.ckan.org/en/latest/api/index.html).
 
-`ckanapi` expects action payload to be represented by the `Paylod` class. It accept one of the following as a constructor parameter:
+`ckanapi` expects action payload to be represented by:
 
 * JSON serializable object
 
   ```js
-  const payload = new Payload({
+  const payload = {
     a: 1,
     b: "string",
     c: boolean,
     d: null,
     e: ['array', 'of', 'values'],
     f: {nested: 'object'}
-  })
+  }
   ```
 
 * FormData object:
@@ -203,8 +201,6 @@ Often, CKAN actions expect some kind of user input. Above you've seen, how to pa
   const form = new FormData
   form.append("field", "value")
   form.append("another", "field")
-
-  const payload = new Payload(form)
   ```
 
 ## Advanced
@@ -263,19 +259,19 @@ const data = await portal.action.package_list()
 
 Return activity stream list of Dataset
 ```js
-const payload = new CkanApi.Payload({"id": ID})
+const payload = {"id": ID}
 const data = await portal.action.package_activity_list(payload)
 ```
 
 Return Dataset Details and Metadata
 ```js
-const payload = new CkanApi.Payload({"id": ID})
+const payload = {"id": ID}
 const data = await portal.action.package_show(payload)
 ```
 
 Return a list of Dataset keywords/tags
 ```js
-const payload = new CkanApi.Payload({"id": ID})
+const payload = {"id": ID}
 const data = await portal.action.package_show(payload).then(
   data => data.tags.map(t => t.name)
 )
@@ -284,7 +280,7 @@ const data = await portal.action.package_show(payload).then(
 
 Return a list of Dataset Resources
 ```js
-const payload = new CkanApi.Payload({"id": ID})
+const payload = {"id": ID}
 const data = await portal.action.package_show(payload).then(
   data => data.resources
 )
@@ -292,7 +288,7 @@ const data = await portal.action.package_show(payload).then(
 
 Return Dataset Resource Details and Metadata
 ```js
-const payload = new CkanApi.Payload({"id": ID})
+const payload = {"id": ID}
 const data = await portal.action.resource_show(payload)
 ```
 
@@ -304,13 +300,13 @@ const data = await portal.action.organization_list()
 
 Return Organisations Details
 ```js
-const payload = new CkanApi.Payload({"id": ID})
+const payload = {"id": ID}
 const data = await portal.action.organization_show(payload)
 ```
 
 Return a list of custom groups with type "topic"
 ```js
-const payload = new CkanApi.Payload({"type": "topic"})
+const payload = {"type": "topic"}
 const data = await portal.action.group_list(payload)
 ```
 
@@ -321,7 +317,7 @@ const data = await portal.action.group_list()
 
 Return Group Detail
 ```js
-const payload = new CkanApi.Payload({"id": ID})
+const payload = {"id": ID}
 const data = await portal.action.group_show(payload)
 ```
 
@@ -332,7 +328,7 @@ const data = await portal.action.user_list()
 
 Return User Detail
 ```js
-const payload = new CkanApi.Payload({"id": ID})
+const payload = {"id": ID}
 const data = await portal.action.user_show(payload)
 ```
 
@@ -340,10 +336,10 @@ const data = await portal.action.user_show(payload)
 ### Searching the Data Catalogue
 Return a list of filters(facets) for the `license_id` and `res_format` field.
 ```js
-const payload = new CkanApi.Payload({
+const payload = {
   "rows": 0,
   "facet.field": ["license_id", "res_format"]
-})
+}
 const data = await portal.action.package_search(payload).then(
   data => data.facets
 )
@@ -351,11 +347,11 @@ const data = await portal.action.package_search(payload).then(
 
 Return a list of filter values for the `license_id` and `res_format` field found in result set
 ```js
-const payload = new CkanApi.Payload({
+const payload = {
   "rows": 0,
   "facet.field": ["license_id", "res_format"],
   "q": "search query"
-})
+}
 const data = await portal.action.package_search(payload).then(
   data => data.facets
 )
@@ -364,9 +360,9 @@ const data = await portal.action.package_search(payload).then(
 
 Return a list of Datasets matching search term
 ```js
-const payload = new CkanApi.Payload({
+const payload = {
   "q": "search term"
-})
+}
 const data = await portal.action.package_search(payload).then(
   data => data.results
 )
@@ -375,10 +371,10 @@ const data = await portal.action.package_search(payload).then(
 
 Return a faceted list of Datasets
 ```js
-const payload = new CkanApi.Payload({
+const payload = {
   "facet.field": ["license_id", "res_format"],
   "q": "*:*"
-})
+}
 const data = await portal.action.package_search(payload).then(
   data => data
 )
@@ -394,7 +390,7 @@ const data = await portal.action.tag_list()
 ### Working with Dataset Resources within the Datastore
 Returning data from a Datastore Dataset Resource
 ```js
-const payload = new CkanApi.Payload({"id": ID})
+const payload = {"id": ID}
 const data = await portal.action.datastore_search(payload).then(
   data => data.records
 )
@@ -404,10 +400,10 @@ Searching data within a Datastore Dataset Resources
 ```js
 
 ﻿
-const payload = new CkanApi.Payload({
+const payload = {
   "id": ID,
   "filters": {"a": 1}
-})
+}
 const data = await portal.action.datastore_search(payload).then(
   data => data.records
 )
@@ -418,14 +414,14 @@ Creating a Datastore Dataset Resource
 
 const user = portal.withToken(TOKEN)
 
-const payload = new CkanApi.Payload({
+const payload = {
   "id": ID,
   "force": true,
   "primary_key": ["a"],
   "records": [
     {a: 10, b: 20, c: 30 }
   ]
-})
+}
 const data = await user.action.datastore_create(payload)
 ```
 
@@ -433,14 +429,14 @@ Adding a row of data to a Datastore Dataset Resource
 ```js
 const user = portal.withToken(TOKEN)
 
-const payload = new CkanApi.Payload({
+const payload = {
   "id": ID,
   "force": true,
   "type": "insert",
   "records": [
     {a: 11, b: 22, c: 33 }
   ]
-})
+}
 const data = await user.action.datastore_upsert(payload)
 ```
 
@@ -449,14 +445,14 @@ Editing a row of data to a Datastore Dataset Resource
 
 const user = portal.withToken(TOKEN)
 
-const payload = new CkanApi.Payload({
+const payload = {
   "id": ID,
   "force": true,
   "type": "update",
   "records": [
     {a: 11, b: 222, c: 333 }
   ]
-})
+}
 const data = await user.action.datastore_upsert(payload)
 ```
 
@@ -465,10 +461,10 @@ Deleting a row of data from a Datastore Dataset Resource
 
 const user = portal.withToken(TOKEN)
 
-const payload = new CkanApi.Payload({
+const payload = {
   "id": ID,
   "force": true,
   "filters": {"a": 11}
-})
+}
 const data = await user.action.datastore_delete(payload)
 ```

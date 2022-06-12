@@ -2,13 +2,11 @@ type JSONPayload = {
   [k: string]: string | number | boolean | JSONPayload[] | JSONPayload;
 };
 
-type Interceptor = (url: URL, params: RequestParams, resp?: IResponse) => Promise<IResponse | null> | IResponse | null;
-
 type FormPayload = FormData;
 // type NodePayload = { [k: string]: string | Buffer };
 
-export class Payload<T = JSONPayload | FormPayload>{
-  constructor(protected payload: T) { }
+export class Payload {
+  constructor(protected payload: JSONPayload | FormPayload) {}
 
   asBody() {
     if (this.payload instanceof FormData) {
@@ -19,9 +17,15 @@ export class Payload<T = JSONPayload | FormPayload>{
   }
 }
 
+type Interceptor = (
+  url: URL,
+  params: RequestParams,
+  resp?: IResponse
+) => Promise<IResponse | null> | IResponse | null;
+
 export class Action {
   protected version: number = 3;
-  constructor(public readonly name: string) { }
+  constructor(public readonly name: string) {}
 
   setVersion(v: number) {
     this.version = v;
@@ -47,7 +51,7 @@ export type RequestParams = {
 };
 
 class ActionProxy {
-  constructor(protected portal: Portal) { }
+  constructor(protected portal: Portal) {}
 
   get(_target: any, prop: string, _receiver: any) {
     const action = new Action(prop);
@@ -71,19 +75,22 @@ export class Portal {
     this.client = client || Portal.clientFactory();
     this.url = new URL(url);
     if (this.url.pathname.slice(-1) !== "/") {
-      this.url.pathname += "/"
+      this.url.pathname += "/";
     }
   }
 
   withToken(token: string): Portal {
     const portal = new Portal(this.url, this.client);
     portal.token = token;
-    portal.interceptors = this.interceptors.slice()
+    portal.interceptors = this.interceptors.slice();
 
     return portal;
   }
 
-  async invoke(action: Action, payload?: Payload): Promise<unknown> {
+  async invoke<T>(
+    action: Action,
+    payload?: JSONPayload | FormPayload | Payload
+  ): Promise<T> {
     const url = this.urlFor(action);
 
     const headers = this.token ? { Authorization: this.token } : {};
@@ -93,13 +100,17 @@ export class Portal {
       body: null,
     };
 
-    params.body = payload ? payload.asBody() : null;
+    if (payload) {
+      params.body = (
+        payload instanceof Payload ? payload : new Payload(payload)
+      ).asBody();
+    }
 
     if (typeof params.body === "string") {
       params.headers["content-type"] = "application/json";
     }
 
-    await this.beforeRequest(url, params)
+    await this.beforeRequest(url, params);
 
     const resp = await this.afterRequest(
       url,
@@ -117,9 +128,7 @@ export class Portal {
   }
 
   documentation(action: Action) {
-    const payload = new Payload({ name: action.name })
-    const helpAction = new Action("help_show")
-    return this.invoke(helpAction, payload)
+    return this.invoke<string>(new Action("help_show"), { name: action.name });
   }
 
   urlFor(action: Action): URL {
@@ -139,10 +148,10 @@ export class Portal {
         resp = r;
       }
     }
-    return resp
+    return resp;
   }
 
   addInterceptor(interceptor: Interceptor) {
-    this.interceptors.push(interceptor)
+    this.interceptors.push(interceptor);
   }
 }
