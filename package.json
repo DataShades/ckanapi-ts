@@ -15,7 +15,7 @@
     "ci": "(npm run test-build && npm run rollup) & npm t & wait",
     "prepublishOnly": "npm run ci && npm run rollup"
   },
-  "keywords": [],
+  "keywords": ["CKAN", "API", "typescript", "opendata", "sdk"],
   "author": "LinkDigital",
   "license": "Apache-2.0",
   "repository": {
