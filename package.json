@@ -1,6 +1,6 @@
 {
   "name": "ckanapi",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Client for CKAN API",
   "main": "dist/index.js",
   "browser": "dist/browser.js",
@@ -15,7 +15,13 @@
     "ci": "(npm run test-build && npm run rollup) & npm t & wait",
     "prepublishOnly": "npm run ci && npm run rollup"
   },
-  "keywords": ["CKAN", "API", "typescript", "opendata", "sdk"],
+  "keywords": [
+    "CKAN",
+    "API",
+    "typescript",
+    "opendata",
+    "sdk"
+  ],
   "author": "LinkDigital",
   "license": "Apache-2.0",
   "repository": {
