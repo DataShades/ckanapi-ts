@@ -79,22 +79,22 @@ Create an instance of `Portal` that will communicate with the CKAN application. 
 Optionally, provide an API Token in order to pass the authorization check of the restricted actions. You don't have to set API Token, without it all requests will be made on behalf of the anonymous user.
 
 ```js
-# anonymous client. Suitable for package search and display
+// anonymous client. Suitable for package search and display
 const portal = new CkanApi.Portal("https://demo.ckan.org")
 
-# different client that will perform requiests on behalf of the token owner
+// different client that will perform requiests on behalf of the token owner
 const portalWithUser = portal.withToken("my-secret-api-token")
 ```
 
 Pay attention to the example above. `Portal::withToken` creates a new instance of the portal. This means, that `portal` from the example still performs un-authenticated requests, while `portalWithuser` acts as the logged-in user. That allows you to split the single anonymous client into multiple independent user-clients:
 
 ```js
-# first user
+// first user
 const john = portal.withToken("john-secret-api-token")
-# second user
+// second user
 const ashley = portal.withToken("ashley-secret-api-token")
 
-# sysadmin for the really specific cases
+// sysadmin for the really specific cases
 const sysadmin = portal.withToken("admin-secret-api-token")
 ```
 
@@ -109,13 +109,13 @@ ckan user token add <username> <token-name>
 Using the `Portal` instance you are allowed to interact with absolutely every native and custom CKAN API endpoint. There are two flavors of API interaction. Internally they are identical but depending on your preferences and situation, you can choose either one. Let's call the `status_show` action, which displays basic information about the portal:
 
 ```js
-# Chained style, for js/python/ruby lovers
+// Chained style, for js/python/ruby lovers
 portal
   .action
   .status_show()
   .then(data => console.log(data))
 
-# Structure style for go/rust/haskel adepts
+// Structure style for go/rust/haskel adepts
 const action = new CkanApi.Action("status_show")
 const data = await portal.invoke(action)
 console.log(data)
